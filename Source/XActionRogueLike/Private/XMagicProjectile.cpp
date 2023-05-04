@@ -14,6 +14,10 @@ AXMagicProjectile::AXMagicProjectile()
 	PrimaryActorTick.bCanEverTick = true;
 
 	SphereComp = CreateDefaultSubobject<USphereComponent>(FName("SphereComp"));
+	// SphereComp->SetCollisionObjectType(ECC_WorldDynamic);
+	// SphereComp->SetCollisionResponseToAllChannels(ECR_Ignore);
+	// SphereComp->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
+	SphereComp->SetCollisionProfileName(FName("Projectile"));
 	RootComponent = SphereComp;
 
 	EffectComp = CreateDefaultSubobject<UParticleSystemComponent>(FName("EffectComp"));

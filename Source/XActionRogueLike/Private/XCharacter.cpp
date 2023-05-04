@@ -49,6 +49,8 @@ void AXCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	
 	PlayerInputComponent->BindAxis(FName("Turn"), this, &APawn::AddControllerYawInput);
 	PlayerInputComponent->BindAxis(FName("LookUp"), this, &APawn::AddControllerPitchInput);
+
+	PlayerInputComponent->BindAction(FName("PrimaryAttack"), IE_Pressed, this, &AXCharacter::PrimaryAttack);
 }
 
 void AXCharacter::MoveForward(float Value)
@@ -72,4 +74,15 @@ void AXCharacter::MoveRight(float Value)
 	const FVector RightVector = FRotationMatrix(ControlRot).GetScaledAxis(EAxis::Y);
 	
 	AddMovementInput(RightVector, Value);
+}
+
+void AXCharacter::PrimaryAttack()
+{
+	FVector HandLocation = GetMesh()->GetSocketLocation(FName("Muzzle_01"));
+
+	FTransform SpawnTM = FTransform(GetControlRotation(), HandLocation);
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	
+	GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTM, SpawnParams);
 }
